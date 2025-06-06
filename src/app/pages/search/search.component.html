@@ -1,0 +1,91 @@
+<div class="search-layout">
+  <div class="map-section">
+    <google-map
+      [height]="'100%'"
+      [width]="'100%'"
+      [center]="mapOptions.center!"
+      [zoom]="mapOptions.zoom!"
+      [options]="mapOptions"
+      (zoomChanged)="onZoomChanged($event.zoom)"
+    >
+      <map-marker
+        *ngFor="let place of places"
+        [position]="{lat: place.latitude, lng: place.longitude}"
+        [icon]="markerIcon"
+        [title]="place.name"
+        (mouseover)="showHoverCard(place, $event)"
+        (mouseout)="hideHoverCard(place)"
+        (click)="togglePlaceExpansion(place)"
+      ></map-marker>
+    </google-map>
+
+    <!-- Hover Card -->
+    <div *ngFor="let place of places" 
+         class="hover-card" 
+         [class.visible]="place.showHover"
+         [style.left.px]="place.hoverX"
+         [style.top.px]="place.hoverY">
+      <div class="hover-card-content">
+        <h4>{{ place.name }}</h4>
+        <div class="hover-ratings">
+          <app-star-rating [rating]="place.rating"></app-star-rating>
+          <app-yelp-ribbon [yelpRating]="place.yelp_rating"></app-yelp-ribbon>
+        </div>
+        <div class="hover-status" [class.open]="place.opening_hours.open_now" [class.closed]="!place.opening_hours.open_now">
+          {{ place.opening_hours.open_now ? 'Open Now' : 'Closed' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="search-button-container">
+      <button class="search-button" (click)="startSearchAnimation()">Search</button>
+      <div class="ripple-effect" [class.active]="isSearching"></div>
+    </div>
+  </div>
+
+  <div class="chat-section">
+    <div class="preferences-bar">
+      <button class="preference-button">Cuisine</button>
+      <button class="preference-button">Budget ($)</button>
+      <button class="preference-button">Amenities</button>
+    </div>
+    <div class="chat-header">Forkcast</div>
+    <div class="chat-content">
+      <div *ngFor="let message of chatMessages" class="chat-message">
+        <p>{{ message }}</p>
+      </div>
+      <div *ngFor="let place of places" class="place-card" [class.expanded]="place.expanded" (click)="togglePlaceExpansion(place)">
+        <div class="place-card-header">
+          <h3>{{ place.name }}</h3>
+          <input type="checkbox" [(ngModel)]="place.selected" class="tick-icon" (click)="$event.stopPropagation()" />
+        </div>
+        <p>{{ place.formatted_address }}</p>
+        <div class="ratings">
+          <app-star-rating [rating]="place.rating"></app-star-rating>
+          <app-yelp-ribbon [yelpRating]="place.yelp_rating"></app-yelp-ribbon>
+        </div>
+        <div class="status" [class.open]="place.opening_hours.open_now" [class.closed]="!place.opening_hours.open_now">
+          {{ place.opening_hours.open_now ? 'Open Now' : 'Closed' }}
+        </div>
+        <div class="review-summary">{{ place.review_summary }}</div>
+        <img *ngIf="place.photo" [src]="place.photo" alt="{{ place.name }}" class="place-photo"/>
+        <div *ngIf="place.expanded" class="place-details">
+          <p><strong>Google Rating:</strong> {{ place.rating }} ({{ place.user_ratings_total || 0 }} reviews)</p>
+          <p><strong>Yelp Rating:</strong> {{ place.yelp_rating }}</p>
+          <p><strong>Address:</strong> {{ place.formatted_address }}</p>
+          <p><strong>Status:</strong> {{ place.opening_hours.open_now ? 'Open Now' : 'Closed' }}</p>
+          <p><strong>Review Summary:</strong> {{ place.review_summary }}</p>
+          <p><strong>Latitude:</strong> {{ place.latitude }}</p>
+          <p><strong>Longitude:</strong> {{ place.longitude }}</p>
+          <p><strong>Place ID:</strong> {{ place.place_id }}</p>
+        </div>
+      </div>
+    </div>
+    <button *ngIf="anyPlaceSelected()" class="here-we-go-button" (click)="createRoute()">Here We Go!</button>
+    <div class="chat-input-area">
+      <input type="text" placeholder="Type your message..." class="message-input" [(ngModel)]="currentChatMessage" (keyup.enter)="onSendMessage()" />
+      <button class="mic-button" (click)="onMicClick()">🎤</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" [class.active]="anyPlaceExpanded()" (click)="collapseAllPlaces()"></div> 

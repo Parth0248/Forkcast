@@ -1,0 +1,250 @@
+.search-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.map-section {
+  flex: 2; /* 2/3rd or 3/4th, adjusting later if needed */
+  position: relative;
+}
+
+.chat-section {
+  flex: 1; /* Remaining section */
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5; /* Light grey background for chat */
+  padding: 15px;
+  box-shadow: -2px 0 8px rgba(60,64,67,.08);
+}
+
+.chat-header {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #333;
+}
+
+.chat-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px; /* For scrollbar */
+}
+
+.chat-message {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.chat-input-area {
+  display: flex;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.message-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-right: 10px;
+  font-size: 1em;
+}
+
+.mic-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.search-button-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-size: 1.2em;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.ripple-effect {
+  position: absolute;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  animation: ripple-animation 1.5s infinite;
+}
+
+.ripple-effect.active {
+  animation-play-state: running;
+}
+
+@keyframes ripple-animation {
+  from {
+    opacity: 1;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.place-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tick-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.here-we-go-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 15px;
+  align-self: center;
+  box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+  transition: background-color 0.3s ease;
+}
+
+.here-we-go-button:hover {
+  background-color: #218838;
+}
+
+.place-photo {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.place-card.expanded {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  z-index: 1000;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.place-details {
+  margin-top: 15px;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.place-details p {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  backdrop-filter: blur(5px); /* Blurs the background */
+  z-index: 999;
+  display: none;
+}
+
+.overlay.active {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .search-layout {
+    flex-direction: column;
+  }
+  .map-section, .chat-section {
+    width: 100vw;
+    height: 50vh;
+    max-width: none;
+  }
+}
+
+.place-card {
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(60,64,67,.08);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+.ratings {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.status.open { color: green; }
+.status.closed { color: red; }
+
+.preferences-bar {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+
+.preference-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.preference-button:hover {
+  background-color: #e0e0e0;
+  border-color: #bbb;
+} 

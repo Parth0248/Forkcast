@@ -15,8 +15,8 @@ export class SigninComponent {
       .then((result: any) => {
         // Handle successful sign-in
         console.log('Google Sign-in successful', result);
-        // Redirect to the results page
-        this.router.navigate(['/results']);
+        // Redirect to the search page
+        this.router.navigate(['/search']);
       })
       .catch((error: any) => {
         // Handle errors
