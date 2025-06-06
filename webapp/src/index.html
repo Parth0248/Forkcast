@@ -7,8 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWn6yQmQ0JqfwcFtcrlsM4dG9EOKyhfYM&libraries=places">
+  <script src="assets/env.js"></script>
+  <script>
+    // Load Google Maps API dynamically after env.js is loaded
+    window.addEventListener('load', function() {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${window.ENV.googleMapsApiKey}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    });
   </script>
 </head>
 <body>
