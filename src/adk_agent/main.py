@@ -102,19 +102,22 @@ async def run_single_turn(
         print("\n   ---- UPDATED search_results in Session ----")
         print(updated_session.state['search_results'])
         print("  --------------------------------------\n\n")
-           
-    elif updated_session.state and "query_details" in updated_session.state:
-        query_details = updated_session.state['query_details']
-        # status = query_details.get('status', 'UNKNOWN')
-        # iteration = query_details.get('processing_flags', {}).get('iteration_count', 0)
-        # logger.info(f"Session state - Status: {status}, Iteration: {iteration}")
-        
-        print("\n   ---- UPDATED query_detail in Session ----")
-        print(query_details)
+    if updated_session.state and "yelp_reviews_data" in updated_session.state:
+        print("\n   ---- UPDATED yelp_reviews_data in Session ----")
+        print(updated_session.state['yelp_reviews_data'])
         print("  --------------------------------------\n\n")
-    else:
-        logger.warning("No query_details found in session state")
-        print("\n   (No query_detail found in session state yet)")
+    if updated_session.state and "google_reviews_data" in updated_session.state:
+        print("\n   ---- UPDATED google_reviews_data in Session ----")
+        print(updated_session.state['google_reviews_data'])
+        print("  --------------------------------------\n\n")
+    if updated_session.state and "fsq_data" in updated_session.state:
+        print("\n   ---- UPDATED fsq_data in Session ----")
+        print(updated_session.state['fsq_data'])
+        print("  --------------------------------------\n\n")
+    if updated_session.state and "busyness_data" in updated_session.state:
+        print("\n   ---- UPDATED busyness_data in Session ----")
+        print(updated_session.state['busyness_data'])
+
 
     if final_agent_response_parts:
         final_response = ''.join(final_agent_response_parts)
@@ -160,7 +163,7 @@ async def main():
     
     logger.info(f"New session created: {current_session.id}")
     print(f"New session created: {current_session.id}")
-    print("\ncurrent_session.state['query_details'] initialized with default preferences.", json.dumps(current_session.state['query_details'], indent=2, default=str))
+    # print("\ncurrent_session.state['query_details'] initialized with default preferences.", json.dumps(current_session.state['query_details'], indent=2, default=str))
 
     print("\nWelcome to Forkcast! How can I help you find a great place to eat today?")
     print("Type 'exit' or 'quit' to end the conversation.")

@@ -135,6 +135,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+environment.prod.ts
+environment.ts
 
 # Spyder project settings
 .spyderproject
@@ -192,3 +194,32 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+WebApp.pdf
+
+# Node modules
+node_modules/
+
+# Build output
+/dist/
+/build/
+
+# Environment files
+.env
+
+# IDE files
+.vscode/
+.idea/
+.DS_Store
+
+# Angular specific
+.angular/cache/
+.angular/config.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated
+Thumbs.db

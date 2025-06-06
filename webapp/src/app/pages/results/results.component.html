@@ -1,0 +1,36 @@
+<div class="results-layout">
+  <div class="chat-window">
+    <app-user-avatar [photoUrl]="user.photoUrl" [initials]="user.initials" [name]="user.name"></app-user-avatar>
+    <div class="chat-header">Forkcast Results</div>
+    <div class="chat-content">
+      <div *ngFor="let place of places" class="place-card">
+        <h3>{{ place.name }}</h3>
+        <p>{{ place.formatted_address }}</p>
+        <div class="ratings">
+          <app-star-rating [rating]="place.rating"></app-star-rating>
+          <app-yelp-ribbon [yelpRating]="place.yelp_rating"></app-yelp-ribbon>
+        </div>
+        <div class="status" [class.open]="place.opening_hours.open_now" [class.closed]="!place.opening_hours.open_now">
+          {{ place.opening_hours.open_now ? 'Open Now' : 'Closed' }}
+        </div>
+        <div class="review-summary">{{ place.review_summary }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="map-window">
+    <google-map
+      [height]="'100vh'"
+      [width]="'100%'"
+      [center]="mapOptions.center"
+      [zoom]="mapOptions.zoom"
+      [options]="mapOptions.options"
+    >
+      <map-marker
+        *ngFor="let place of places"
+        [position]="{lat: place.latitude, lng: place.longitude}"
+        [icon]="markerIcon"
+        [title]="place.name"
+      ></map-marker>
+    </google-map>
+  </div>
+</div> 
