@@ -42,13 +42,13 @@ fsq_enrichment_agent = LlmAgent(
     name='FourSquareEnrichmentAgent',
     instruction=FOURSQUARE_ENRICHMENT_AGENT_INSTRUCTIONS,
     description=(
-        "Fetches restaurant attributes, amenities, menu and dietary data from Foursquare API for up to 10 restaurants. "
+        "Fetches restaurant attributes, amenities, menu and dietary data from Foursquare API for up to 8 restaurants. "
         "Takes restaurant names and addresses, searches Foursquare for matches, and returns "
         "filtered data including title, attributes, amenities, menu and dietary data. "
         "Handles no-match scenarios by setting fields to null. "
         "Input must be a valid JSON string with restaurant data."
     ),
-    output_key='fsq_data',
-    tools=[fsq_toolset]
+    tools=[fsq_toolset],
+    output_key='fsq_data'
 )
 

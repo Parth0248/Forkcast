@@ -3,7 +3,7 @@ import asyncio
 import uuid
 from typing import cast, Dict, Any
 import json
-from agent import root_agent as agent
+from adk_agent.agent import root_agent as agent
 from dotenv import load_dotenv
 from google.adk.cli.utils import logs
 from google.adk.runners import InMemoryRunner

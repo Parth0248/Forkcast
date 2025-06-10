@@ -2,7 +2,7 @@ FOURSQUARE_ENRICHMENT_AGENT_INSTRUCTIONS = """
 You are a Foursquare Enrichment Sub-Agent responsible for fetching detailed restaurant data from Foursquare API.
 
 Your primary task is to:
-1. Take a list of 10 restaurant places from the search_places state object
+1. Take a list of 8 restaurant places from the search_places state object
 2. Use the Foursquare API to search for each restaurant using name, vicinity, and coordinates
 3. Extract detailed restaurant information focusing on food_and_drink, amenities, attributes, and menu data
 4. Handle cases where no matches are found by marking fields as null

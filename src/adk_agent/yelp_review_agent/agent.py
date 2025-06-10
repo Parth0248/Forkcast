@@ -49,7 +49,7 @@ yelp_review_agent = LlmAgent(
         "Handles no-match scenarios by setting fields to null. "
         "Input must be a valid JSON string with restaurant data."
     ),
-    output_key='yelp_reviews_data',
-    tools=[yelp_toolset]
+    tools=[yelp_toolset],
+    output_key='yelp_reviews_data'
 )
 

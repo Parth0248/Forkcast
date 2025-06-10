@@ -45,7 +45,7 @@ busyness_forecast_agent = LlmAgent(
         "This agent predicts the busyness of a location based on historical data and current conditions. "
         "It uses the BestTime API to gather data and provide insights on live and expected busyness levels."
     ),
-    output_key='busyness_data',
-    tools=[besttime_toolset]
+    tools=[besttime_toolset],
+    output_key='busyness_data'
 )
 

@@ -2,7 +2,7 @@ BUSYNESS_FORECAST_AGENT_INSTRUCTIONS = """
 You are a Busyness Forecast Sub-Agent responsible for fetching foot traffic forecast and live busyness data from BestTime API.
 
 Your primary task is to:
-1. Take a list of 10 restaurant places from the search_places state object
+1. Take a list of 8 restaurant places from the search_places state object
 2. Use the BestTime API to get foot traffic forecasts and live data for each restaurant using name and vicinity
 3. Extract detailed busyness information focusing on busy hours, peak times, and current live data
 4. Handle cases where no matches are found or API calls fail by marking fields as null
@@ -118,7 +118,7 @@ From **getLiveFootTrafficData** response:
 - Always continue to next restaurant
 
 ## Success Criteria
-- All 10 restaurants processed (even if some failed)
+- All 8 restaurants processed (even if some failed)
 - Valid JSON output
 - Clear status for each restaurant
 - Essential busyness data extracted when available

@@ -14,6 +14,7 @@ from yelp_review_agent.agent import yelp_review_agent
 from fsq_enrichment_agent.agent import fsq_enrichment_agent
 from google_reviews_agent.agent import google_reviews_agent
 from busyness_forecast_agent.agent import busyness_forecast_agent
+from final_review_agent.agent import final_review_agent
 
 from conversational_agent.prompt import CONVERSATIONAL_AGENT_INSTRUCTIONS
 
@@ -44,15 +45,22 @@ sequential_search_agent = SequentialAgent(
 # Instantiate user_preference_agent as a tool for the ConversationalAgent
 user_preference_agent_instance = AgentTool(agent=user_preference_agent)
 sequential_search_agent_instance = AgentTool(agent=sequential_search_agent)
+final_review_agent_instance = AgentTool(agent=final_review_agent)
 
-conversational_agent = LlmAgent(
+# conversational_agent = LlmAgent(
+root_agent = LlmAgent(
     name="ConversationalAgent",
     model=NEW_GEMINI_MODEL,
     instruction=CONVERSATIONAL_AGENT_INSTRUCTIONS,
     # instruction=TEST_PROMPT,
-    description="Manages conversation, extracts preferences, sends it to the user_preference_agent to update and validate its preferences, and identify critical missing information.",
+    description="Manages conversation, extracts preferences, sends it to the user_preference_agent to update and validate its preferences, and identify critical missing information."
+                "It then uses the sequential_search_agent to search for restaurants based on the validated preferences and enriches the results with reviews and forecasts."
+                "Finally, it uses the final_review_agent to summarize and finalize the results.",
     tools=[
         user_preference_agent_instance,  # Use the user_preference_agent tool
         sequential_search_agent_instance,  # Use the restaurant_search_agent tool
-    ]
+        final_review_agent_instance,  # Final review agent to summarize and finalize the results
+    ],
+    # output_key='query_summary',  # The output will be a JSON string of the updated query_details
+    
 )

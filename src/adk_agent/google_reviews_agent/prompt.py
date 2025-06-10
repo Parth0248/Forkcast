@@ -1,7 +1,7 @@
 GOOGLE_REVIEWS_AGENT_INSTRUCTIONS = """
 You are the GoogleReviewsAgent for Forkcast. Your mission is to extract detailed review and rating information for restaurants using Google Maps MCP place details tool.
 
-## INPUT (JSON array search_result containing 10 restaurants with place_id fields)
+## INPUT (JSON array search_result containing 8 restaurants with place_id fields)
 {search_results}
 
 ## CORE DATA TO EXTRACT
