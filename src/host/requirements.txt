@@ -1,0 +1,65 @@
+# Core ADK and Google Cloud Platform
+google-adk>=1.4.0
+google-cloud-aiplatform[adk,agent_engines]>=1.88.0
+
+# FastAPI and HTTP dependencies (for OpenAPI authentication)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.10.0
+
+# Authentication and HTTP clients
+httpx>=0.25.0
+requests>=2.31.0
+
+# Firebase and Firestore (if you're still using them)
+firebase-admin>=6.5.0
+google-cloud-firestore>=2.21.0
+
+# Environment and configuration
+python-dotenv>=1.0.0
+absl-py>=2.3.0
+
+# Core Google Cloud dependencies
+google-auth>=2.40.0
+google-api-core>=2.24.0
+google-cloud-core>=2.4.0
+
+# Data processing and validation
+pydantic-settings>=2.9.0
+typing-extensions>=4.13.0
+
+# JSON and data handling
+jsonschema>=4.19.0
+
+# OpenAPI and API tools
+openapi-spec-validator>=0.7.0
+
+# MCP (Model Context Protocol) dependencies
+# Note: @modelcontextprotocol/server-google-maps is installed via npm in Dockerfile
+
+# Async and concurrency
+asyncio-throttle>=1.0.0
+
+# Logging and monitoring
+structlog>=23.0.0
+
+# Additional utilities for API integrations
+urllib3>=2.0.0
+certifi>=2023.0.0
+
+# For handling external API responses and data parsing
+python-dateutil>=2.8.0
+pytz>=2023.0.0
+
+# Security and encryption (useful for API keys)
+cryptography>=41.0.0
+
+# Development and testing (optional, but useful)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# CORS middleware for FastAPI
+python-multipart>=0.0.6
+
+# For better JSON handling with external APIs
+orjson>=3.9.0

@@ -1,6 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported as analyticsIsSupported } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 const firebaseConfig = {
@@ -13,16 +14,12 @@ const firebaseConfig = {
   measurementId: environment.firebase.measurementId
 };
 
-const app = initializeApp(firebaseConfig);
-
-// Only initialize analytics if supported (i.e., in the browser)
-if (typeof window !== 'undefined') {
-  analyticsIsSupported().then((supported) => {
-    if (supported) {
-      getAnalytics(app);
-    }
-  });
+// Create a factory function to initialize Firebase
+export function initializeFirebase() {
+  const platformId = inject(PLATFORM_ID);
+  const app = isPlatformBrowser(platformId) ? initializeApp(firebaseConfig) : null;
+  const auth = app ? getAuth(app) : null;
+  return { app, auth };
 }
 
-export const auth = getAuth(app);
-export default app;
+export { firebaseConfig };

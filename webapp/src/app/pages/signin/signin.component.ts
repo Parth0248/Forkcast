@@ -11,12 +11,16 @@ export class SigninComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   signInWithGoogle() {
-    this.authService.signInWithGoogle()
+    this.authService.googleSignIn()
       .then((result: any) => {
         // Handle successful sign-in
         console.log('Google Sign-in successful', result);
-        // Redirect to the search page
-        this.router.navigate(['/search']);
+
+        const userName = result?.user?.displayName || '';
+        localStorage.setItem('userName', userName);
+
+        // Redirect to the party-selection page
+        // this.router.navigate(['/party-selection']);
       })
       .catch((error: any) => {
         // Handle errors

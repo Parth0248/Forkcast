@@ -1,0 +1,83 @@
+{
+  "/apps/solo/**": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/apps/solo/": "/apps/"
+    }
+  },
+  "/run/solo": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/run/solo": "/run"
+    }
+  },
+  "/run_sse/solo": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/run_sse/solo": "/run_sse"
+    }
+  },
+  "/apps/guest/**": {
+    "target": "http://localhost:7000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/apps/guest/": "/apps/"
+    }
+  },
+  "/run/guest": {
+    "target": "http://localhost:7000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/run/guest": "/run"
+    }
+  },
+  "/run_sse/guest": {
+    "target": "http://localhost:7000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/run_sse/guest": "/run_sse"
+    }
+  },
+  "/apps/host/**": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/apps/host/": "/apps/"
+    }
+  },
+  "/run/host": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/run/host": "/run"
+    }
+  },
+  "/run_sse/host": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/run_sse/host": "/run_sse"
+    }
+  }
+}

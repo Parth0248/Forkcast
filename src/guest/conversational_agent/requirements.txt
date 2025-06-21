@@ -1,0 +1,8 @@
+google-adk
+google-cloud-aiplatform[adk]>=1.88
+firebase-admin>=6.0.0
+python-dotenv>=1.0.0
+google-cloud-firestore>=2.0.0
+pydantic>=2.10.0
+absl-py>=2.0.0
+requests>=2.30.0

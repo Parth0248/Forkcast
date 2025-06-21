@@ -1,25 +1,51 @@
-import { Injectable } from '@angular/core';
-import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig';
-import { Observable, from } from 'rxjs';
-import { startWith } from 'rxjs/operators';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { Auth, signInWithRedirect, GoogleAuthProvider, getRedirectResult, User } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+import { signInWithPopup } from '@angular/fire/auth';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user$: Observable<User | null>;
+  private auth: Auth = inject(Auth);
+  private router: Router = inject(Router);
+  private platformId: Object = inject(PLATFORM_ID);
+  private provider = new GoogleAuthProvider();
 
   constructor() {
-    this.user$ = new Observable<User | null>(observer => {
-      auth.onAuthStateChanged(user => {
-        observer.next(user);
-      });
-    }).pipe(startWith(auth.currentUser));
+    // if (isPlatformBrowser(this.platformId)) {
+    //   this.handleRedirectResult();
+    // }
   }
 
-  signInWithGoogle() {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+  googleSignIn() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return Promise.reject(new Error('Authentication is only available in browser environment'));
+    }
+    return signInWithPopup(this.auth, this.provider)
+      .then((result) => {
+        return result.user.getIdToken().then(token => {
+          localStorage.setItem('authToken', token);
+          this.router.navigate(['/party-selection']);
+        });
+      });
   }
-} 
+
+  isAuthenticated(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false;
+    }
+    return !!localStorage.getItem('authToken');
+  }
+
+  signOut() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    localStorage.removeItem('authToken');
+    this.auth.signOut();
+    this.router.navigate(['/signin']);
+  }
+}

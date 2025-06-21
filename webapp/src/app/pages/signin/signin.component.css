@@ -3,11 +3,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 98vh;
   background: #fcfcfa;
 }
 .logo {
-  width: 300px;
+  width: 280px;
   margin-bottom: 10px;
 }
 .title-box {

@@ -1,0 +1,101 @@
+<!-- party-selection.component.html -->
+<div class="party-selection-container">
+  <div class="party-selection-card">
+    
+    <!-- Forkcast Logo/Title -->
+    <div class="header">
+      <img src="assets/logo_transparent.png" alt="Forkcast" class="logo" />
+      <h1>Welcome to Forkcast</h1>
+      <p class="subtitle">Choose how you'd like to find your perfect restaurant</p>
+    </div>
+
+    <!-- Initial State: Three Options -->
+    <div class="button-section" *ngIf="currentState === 'initial'">
+      <div class="button-row">
+        <button class="party-btn host-btn" (click)="onHostParty()">
+          <span class="btn-icon">🎉</span>
+          <span class="btn-text">Host a Party</span>
+        </button>
+        
+        <button class="party-btn join-btn" (click)="onJoinParty()">
+          <span class="btn-icon">👥</span>
+          <span class="btn-text">Join a Party</span>
+        </button>
+      </div>
+      
+      <button class="party-btn solo-btn full-width" (click)="onSearchSolo()">
+        <span class="btn-icon">🔍</span>
+        <span class="btn-text">Search Solo</span>
+      </button>
+    </div>
+
+    <!-- Hosting State: Show Generated Code -->
+    <div class="hosting-section" *ngIf="currentState === 'hosting'">
+      <div class="status-header">
+        <span class="status-badge host-badge">Host Mode</span>
+        <h2>Your Party Code</h2>
+        <p>Share this code with your friends so they can join your party!</p>
+      </div>
+
+      <div class="code-section">
+        <div class="code-display">
+          <span class="party-code">{{ getFormattedPartyCode() }}</span>
+          <button class="copy-btn" (click)="copyPartyCode()" [class.copied]="isCodeCopied">
+            <img src="assets/copy_clipboard.png" alt="Copy" class="copy-icon" *ngIf="!isCodeCopied" />
+            <span class="checkmark" *ngIf="isCodeCopied">✓</span>
+            <span class="copy-text">{{ isCodeCopied ? 'Copied!' : 'Copy' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="party-btn search-btn" (click)="onProceedToSearch()">
+          <span class="btn-icon">🔍</span>
+          <span class="btn-text">Start Searching</span>
+        </button>
+        <button class="back-btn" (click)="onGoBack()">← Back</button>
+      </div>
+    </div>
+
+    <!-- Joining State: Enter Code -->
+    <div class="joining-section" *ngIf="currentState === 'joining'">
+      <div class="status-header">
+        <span class="status-badge guest-badge">Guest Mode</span>
+        <h2>Join a Party</h2>
+        <p>Enter the party code shared by your host</p>
+      </div>
+
+      <div class="input-section">
+        <div class="code-input-group">
+          <input 
+            type="text" 
+            [(ngModel)]="enteredPartyCode"
+            placeholder="Enter Party Code"
+            class="code-input"
+            maxlength="6"
+            (input)="enteredPartyCode = enteredPartyCode.toUpperCase()"
+            (keyup.enter)="onJoinWithCode()"
+          />
+          <button 
+            class="party-btn join-search-btn" 
+            (click)="onJoinWithCode()"
+            [disabled]="!enteredPartyCode.trim() || isValidatingCode"
+          >
+            <span class="btn-icon" *ngIf="!isValidatingCode">👥</span>
+            <span class="loading-spinner" *ngIf="isValidatingCode"></span>
+            <span class="btn-text">{{ isValidatingCode ? 'Joining...' : 'Join Party' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="party-btn search-btn solo-option" (click)="onSearchSolo()">
+          <span class="btn-icon">🔍</span>
+          <span class="btn-text">Search Solo Instead</span>
+        </button>
+        <button class="back-btn" (click)="onGoBack()">← Back</button>
+      </div>
+    </div>
+
+  </div>
+</div>

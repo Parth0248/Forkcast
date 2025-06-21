@@ -1,137 +1,213 @@
-<div class="flex h-screen w-screen overflow-hidden">
-  <div class="w-3/4 h-full bg-gray-200 relative">
+<!-- search.component.html -->
+<div class="main-container">
+  <!-- Map Panel -->
+  <div class="map-panel">
     <google-map
+      #map
+      height="100%"
+      width="100%"
       [options]="mapOptions"
-      class="w-full h-full"
-      (zoomChanged)="onZoomChanged()">
+      (mapClick)="closeInfoWindowSafe()"
+    >
+      <!-- Info Window -->
+      <map-info-window
+        #infoWindow
+        [position]="selectedRestaurant!.position!"
+        [options]="{ maxWidth: 900, disableAutoPan: false }"
+        *ngIf="selectedRestaurant && showInfoWindow"
+      >
+        <div class="info-window-content" *ngIf="selectedRestaurant">
+          <!-- Close button -->
+          <button class="info-window-close" (click)="closeInfoWindowSafe()">
+            &times;
+          </button>
+
+          <!-- Restaurant Image -->
+          <div
+            class="restaurant-image"
+            *ngIf="selectedRestaurant.media.primary_image"
+          >
+            <img
+              [src]="selectedRestaurant.media.primary_image"
+              [alt]="selectedRestaurant.media.image_alt_text"
+              loading="lazy"
+            />
+          </div>
+
+          <!-- Restaurant Header -->
+          <div class="restaurant-header">
+            <h3>{{ selectedRestaurant.name }}</h3>
+            <div class="rank-badge">Rank #{{ selectedRestaurant.rank }}</div>
+          </div>
+
+          <!-- Rating and Status -->
+          <div class="rating-section">
+            <div class="rating">
+              <span
+                class="stars"
+                [innerHTML]="
+                  getGoogleStarIcons(selectedRestaurant.ratings.google_rating)
+                "
+              ></span>
+              <span class="rating-text"
+                >{{ selectedRestaurant.ratings.google_rating }}/5 ({{
+                  selectedRestaurant.ratings.google_review_count
+                }}
+                reviews)</span
+              >
+            </div>
+            <div
+              class="status"
+              [class.open]="selectedRestaurant.timing.currently_open"
+            >
+              {{
+                selectedRestaurant.timing.currently_open ? "Open Now" : "Closed"
+              }}
+            </div>
+          </div>
+
+          <!-- Basic Info -->
+          <div class="basic-info">
+            <div class="info-row">
+              <strong>Cuisine:</strong>
+              {{ selectedRestaurant.cuisine_and_features.primary_cuisine }}
+            </div>
+            <div class="info-row">
+              <strong>Price:</strong>
+              {{ selectedRestaurant.pricing.price_symbol }}
+            </div>
+            <div class="info-row">
+              <strong>Address:</strong>
+              {{ selectedRestaurant.formatted_address }}
+            </div>
+            <div class="info-row" *ngIf="selectedRestaurant.contact.phone">
+              <strong>Phone:</strong>
+              <a href="tel:{{ selectedRestaurant.contact.phone }}">{{
+                selectedRestaurant.contact.phone
+              }}</a>
+            </div>
+          </div>
+
+          <!-- Match Score -->
+          <div class="match-score">
+            <div class="score-circle">
+              {{ selectedRestaurant.match_score }}%
+            </div>
+            <span>Match Score</span>
+          </div>
+
+          <!-- Why Recommended -->
+          <div class="recommendation">
+            <strong>Why We Recommend:</strong>
+            <p>{{ selectedRestaurant.highlights.why_recommended }}</p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="select-button" (click)="selectRestaurant()">
+              Select This Restaurant
+            </button>
+            <button
+              class="directions-button"
+              (click)="getDirections()"
+              *ngIf="showDirectionsButton"
+            >
+              Here We Go!! 🗺️
+            </button>
+          </div>
+        </div>
+      </map-info-window>
     </google-map>
-    
-    <div class="absolute top-4 left-4 bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-lg">
-      <h2 class="text-lg font-bold text-gray-900">Forkcast</h2>
-      <p class="text-sm text-gray-600 mt-1">Chat with our agent to find restaurants. Results will appear here.</p>
-    </div>
-
-    <div class="absolute inset-0 pointer-events-none">
-      <div *ngFor="let restaurant of restaurants" 
-           class="absolute transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
-           [style.left.%]="restaurant.position.lng"
-           [style.top.%]="restaurant.position.lat">
-        <img src="assets/ReviewRibbon_v2/Desktop/large_32/Review_Ribbon_large_32_5@2x.png"
-             [alt]="restaurant.name"
-             class="w-10 h-10 cursor-pointer hover:scale-110 transition-transform"
-             (click)="openRestaurantModal(restaurant)">
-      </div>
-    </div>
   </div>
 
-  <div class="w-1/4 h-full flex flex-col bg-white border-l border-gray-200">
-    <div class="p-4 border-b border-gray-200">
-      <h2 class="font-bold text-xl">Chat with Forkcast</h2>
-    </div>
-
-    <div class="flex-1 p-4 overflow-y-auto space-y-4">
-      <div *ngFor="let message of chatHistory" 
-           [ngClass]="{
-             'self-end': message.sender === 'user',
-             'self-start': message.sender !== 'user'
-           }"
-           class="p-3 rounded-lg max-w-xs break-words"
-           [ngClass]="{
-             'bg-blue-500 text-white': message.sender === 'user',
-             'bg-gray-200 text-gray-800': message.sender === 'agent',
-             'bg-yellow-100 text-yellow-800 text-sm italic border-l-4 border-yellow-500': message.type === 'system'
-           }">
-        {{ message.text }}
+  <!-- Chat Panel -->
+  <div class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-title-section">
+        <h2>Chat with Forkcast</h2>
+        <span class="party-mode-badge" [ngClass]="getPartyModeClass()">
+          {{ getPartyModeDisplay() }}
+        </span>
+      </div>
+      <div class="location-status" *ngIf="isLoadingLocation">
+        <div class="loading-spinner"></div>
+        <span>Getting your location...</span>
+      </div>
+      <div class="location-status error" *ngIf="locationError">
+        <span>⚠️ {{ locationError }}</span>
       </div>
     </div>
 
-    <div class="p-4 border-t border-gray-200">
-      <div class="flex items-center space-x-2">
-        <input type="text" 
-               [(ngModel)]="userMessage"
-               (keyup.enter)="handleUserMessage()"
-               placeholder="Say hello..." 
-               class="flex-1 w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button (click)="handleUserMessage()"
-                class="bg-blue-500 text-white rounded-full p-3 hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-          </svg>
-        </button>
+    <!-- Restaurant Results -->
+    <div class="restaurant-results" *ngIf="restaurants.length > 0">
+      <h3>Recommended Restaurants</h3>
+      <div class="restaurant-tiles">
+        <div
+          *ngFor="let restaurant of restaurants"
+          class="restaurant-tile rank-{{ restaurant.rank }}"
+          [class.selected]="
+            selectedRestaurant?.place_id === restaurant.place_id
+          "
+          (click)="focusOnRestaurant(restaurant)"
+        >
+          <div class="tile-header">
+            <div class="restaurant-name">{{ restaurant.name }}</div>
+            <div class="rank-indicator">#{{ restaurant.rank }}</div>
+          </div>
+          <div class="tile-details">
+            <div class="rating-price">
+              <span class="rating"
+                >⭐ {{ restaurant.ratings.google_rating }}</span
+              >
+              <span class="price">{{ restaurant.pricing.price_symbol }}</span>
+            </div>
+            <div class="cuisine">
+              {{ restaurant.cuisine_and_features.primary_cuisine }}
+            </div>
+            <div class="status" [class.open]="restaurant.timing.currently_open">
+              {{ restaurant.timing.currently_open ? "Open" : "Closed" }}
+            </div>
+          </div>
+          <div class="match-score-small">
+            {{ restaurant.match_score }}% match
+          </div>
+        </div>
       </div>
-      <button *ngIf="restaurants.length === 0"
-              (click)="findRestaurants()"
-              class="w-full mt-3 bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
-        Find Restaurants!
+    </div>
+
+    <div class="chat-history" #chatHistoryContainer>
+      <div
+        *ngFor="let message of chatHistory; trackBy: trackByFn"
+        class="message-wrapper"
+      >
+        <div
+          class="chat-bubble"
+          [ngClass]="{
+            'user-bubble': message.sender === 'user',
+            'agent-bubble': message.sender === 'agent',
+            'system-bubble': message.sender === 'system'
+          }"
+        >
+          {{ message.text }}
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <input
+        type="text"
+        [(ngModel)]="userMessage"
+        (keyup.enter)="handleUserMessage()"
+        placeholder="Tell Forkcast what you're looking for..."
+        [disabled]="isLoadingLocation"
+      />
+      <button
+        (click)="handleUserMessage()"
+        [disabled]="!userMessage.trim() || isLoadingLocation"
+        class="send-button"
+      >
+        Send
       </button>
     </div>
   </div>
-</div>
-
-<div *ngIf="showModal" 
-   class="fixed inset-0 bg-black bg-opacity-60 z-40"
-   (click)="closeModal()">
-</div>
-
-<div *ngIf="showModal" 
-   class="fixed inset-0 z-50 flex items-center justify-center p-4">
-<div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
-  <div class="overflow-y-auto">
-    <div class="relative">
-      <img [src]="selectedRestaurant?.photo" 
-           [alt]="selectedRestaurant?.name" 
-           class="w-full h-56 object-cover rounded-t-2xl">
-      <button (click)="closeModal()"
-              class="absolute top-4 right-4 bg-black/50 text-white rounded-full p-2 hover:bg-black/75 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <div class="p-6">
-      <div class="flex justify-between items-start">
-        <h2 class="text-3xl font-bold mb-2">{{ selectedRestaurant?.name }}</h2>
-        <div class="text-right flex-shrink-0 ml-4">
-          <div class="text-xl font-bold text-amber-500">⭐ {{ selectedRestaurant?.rating }}</div>
-          <div class="text-lg font-semibold">{{ selectedRestaurant?.price }}</div>
-        </div>
-      </div>
-
-      <p class="text-lg text-gray-600 mb-4">{{ selectedRestaurant?.busyness }}</p>
-
-      <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-6">
-        <p class="font-bold">Why Forkcast picked this for you:</p>
-        <p>{{ selectedRestaurant?.summary }}</p>
-      </div>
-
-      <div class="mb-4">
-        <h3 class="font-semibold mb-2">Key Amenities</h3>
-        <div>
-          <span *ngFor="let amenity of selectedRestaurant?.amenities"
-                class="bg-gray-200 text-gray-700 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
-            {{ amenity }}
-          </span>
-        </div>
-      </div>
-
-      <div class="mb-6">
-        <h3 class="font-semibold mb-2">Dietary Highlights</h3>
-        <div>
-          <span *ngFor="let diet of selectedRestaurant?.diet"
-                class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
-            {{ diet }}
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="p-6 border-t border-gray-200 mt-auto bg-gray-50 rounded-b-2xl">
-    <button (click)="selectRestaurant()"
-            class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-      Select this Place ✓
-    </button>
-  </div>
-</div>
 </div>

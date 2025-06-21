@@ -137,6 +137,20 @@ env.bak/
 venv.bak/
 environment.prod.ts
 environment.ts
+environment.*
+
+forkcast-0248-firebase-adminsdk-fbsvc-c8f0336fb6.json
+src/host/tools/test_final_upload.py
+src/host/tools/test_setup.py
+src/guest/tools/view_uploads.py
+src/guest/tools/setup_test.py
+
+old_adk_agent
+gdeploy
+guest_old
+host_old
+solo_old
+
 
 # Spyder project settings
 .spyderproject
