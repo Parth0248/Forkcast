@@ -8,6 +8,8 @@
 
 **Medium Blog:** [Read more about the project](https://medium.com/@parthmaradia2002/building-forkcast-how-i-created-a-multi-agent-ai-system-to-end-group-dining-chaos-forever-15d7fed85037)
 
+**Technical Report:** [For technical details about the project](https://medium.com/@parthmaradia2002/building-forkcast-how-i-created-a-multi-agent-ai-system-to-end-group-dining-chaos-forever-15d7fed85037)
+
 Forkcast is a multi-agent AI system designed to simplify and streamline the process of choosing a restaurant for groups and individuals. It uses a conversational interface to gather preferences and provides personalized recommendations based on a variety of factors including cuisine, price, location, and even real-time busyness data.
 
 ## Features
