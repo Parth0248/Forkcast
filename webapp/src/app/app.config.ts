@@ -18,6 +18,15 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideAnimations(),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideAuth(() => getAuth()), provideFirebaseApp(() => initializeApp({ projectId: "forkcast-0248", appId: "1:1061887948695:web:a17310fbdf4a5a9e6cb6d2", storageBucket: "forkcast-0248.firebasestorage.app", apiKey: "AIzaSyD0KAZxVBcaQ3kvlLamANL4FnRN8sPqfHU", authDomain: "forkcast-0248.firebaseapp.com", messagingSenderId: "1061887948695", measurementId: "G-90SD3N7JLG" })), provideFirestore(() => getFirestore())
-  ]
+    provideAuth(() => getAuth()), provideFirebaseApp(() => initializeApp({
+        projectId: '<YOUR_PROJECT_ID>',
+        appId: '<YOUR_APP_ID>',
+        storageBucket: '<YOUR_STORAGE_BUCKET>',
+        apiKey: '<YOUR_API_KEY>',
+        authDomain: '<YOUR_AUTH_DOMAIN>',
+        messagingSenderId: '<YOUR_MESSAGING_SENDER_ID>',
+        measurementId: '<YOUR_MEASUREMENT_ID>',
+      })
+    ), provideFirestore(() => getFirestore())
+  ],
 };
